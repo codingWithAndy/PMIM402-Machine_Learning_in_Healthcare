@@ -1,5 +1,5 @@
-install.packages("e1071")
-install.packages('factoextra')
+#install.packages("e1071")
+#install.packages('factoextra')
 library(e1071) # all purpose machine learning package
 library(reshape2) # library to reshape data
 library(ggplot2)
@@ -24,8 +24,8 @@ summary(df)
 df_og <- df
 
 # remove num and X variables from df
-df %>% select(-X, -num)
-df %>% drop_na()
+#df %>% select(-X, -num)
+#df %>% drop_na()
 
 df <- na.omit(df)
 
@@ -123,37 +123,37 @@ for (i in 1:nrow(df['thal'])){
   }
   
 }
-print(df$thal[1])
-print(typeof(df$sex[1]))
-view(df)
-
-df %>% select(-thal,-num, -X)
-
-
-df %>%
-  gather(attributes, value, 1:13) %>%    # gather dplyr verb will turn wide data into long format
-  ggplot(aes(x = value)) +
-  geom_histogram(fill = 'lightblue2', color = 'black') +
-  facet_wrap(~attributes, scales = 'free_x') +
-  labs(x="Values", y="Frequency") +
-  stat("count") +
-  theme_bw()
-
-
-# Split data into training and testing 
-
-bound <- floor((nrow(df)/4)*3)   # 75-25% training testing split
-
-df <- df[sample(nrow(df)),]          # shuffles the data 
-df.train <- df[1:bound, ]              # get training set
-df.test <- df[(bound+1):nrow(df), ]    # get test set
-
-
-#nb_model <- naiveBayes(labels ~ ., data = df.train)
+#print(df$thal[1])
+#print(typeof(df$sex[1]))
+#view(df)
 #
-##Output apriori and conditional probabilities
-#print(nb_model)
-print(df)
+#df %>% select(-thal,-num, -X)
+#
+#
+#df %>%
+#  gather(attributes, value, 1:13) %>%    # gather dplyr verb will turn wide data into long format
+#  ggplot(aes(x = value)) +
+#  geom_histogram(fill = 'lightblue2', color = 'black') +
+#  facet_wrap(~attributes, scales = 'free_x') +
+#  labs(x="Values", y="Frequency") +
+#  stat("count") +
+#  theme_bw()
+#
+#
+## Split data into training and testing 
+#
+#bound <- floor((nrow(df)/4)*3)   # 75-25% training testing split
+#
+#df <- df[sample(nrow(df)),]          # shuffles the data 
+#df.train <- df[1:bound, ]              # get training set
+#df.test <- df[(bound+1):nrow(df), ]    # get test set
+#
+#
+##nb_model <- naiveBayes(labels ~ ., data = df.train)
+##
+###Output apriori and conditional probabilities
+##print(nb_model)
+#print(df)
 
 df <- within(df, rm(num, X))
 
@@ -171,7 +171,7 @@ df$slope <- as.numeric(df$slope)
 df$ca <- as.numeric(df$ca)
 df$thal <- as.numeric(df$thal)
 
-clean_data <- na.omit(df)
+#clean_data <- na.omit(df)
 
 
 df_norm <- as.data.frame(scale(df))
@@ -179,7 +179,7 @@ head(df_norm)
 
 
 # K-Means
-df_K <- kmeans(df_norm, centers = 5)
+df_K <- kmeans(df_norm, centers = 2)
 df_K
 
 ## Hierarchical
