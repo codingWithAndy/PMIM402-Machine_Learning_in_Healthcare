@@ -53,6 +53,12 @@ plot(nbperf, main="Naive Bayes ROC", colorize=T)#
 plot(nbperf, col=1, add=TRUE)
 legend(0.6, 0.6, c('Naive Bayes'), 1:3)
 
+
+confusionMatrix(nb_pred, df_test$class)
+confusionMatrix(testforest, df_test$class)
+confusionMatrix(testforest2, df_test$class)
+
+##### AUC values
 auc_nb <- performance(nbpred, measure = "auc")
 auc_nb <- auc_nb@y.values[[1]]
 auc_rf <- performance(forestpred, measure = "auc")
@@ -86,7 +92,7 @@ varImpPlot(rffit)
 
 
 ### Optimizing A selected Model 
-forest_train2 <- randomForest(class ~ ., data = df_train, ntree = 550, mtry = 2)
+forest_train2 <- randomForest(class ~ ., data = df_train, ntree = 800, mtry = 4, maxnodes=24)
 print(forest_train2) #notice the number of trees, number of splits and the confusion matrix
 plot(forest_train2)
 
@@ -126,7 +132,7 @@ legend(0.6, 0.6, c('rforest', 'nb', 'rforest opt', 'rforest opt 2'), 1:4)
 # Compare 
 print(forest_train)
 print(forest_train2)
-print(forest_train3)
+23print(forest_train3)
 
 
 

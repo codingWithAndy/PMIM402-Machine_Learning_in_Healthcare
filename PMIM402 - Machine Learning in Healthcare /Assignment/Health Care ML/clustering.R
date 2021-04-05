@@ -182,6 +182,21 @@ head(df_norm)
 df_K <- kmeans(df_norm, centers = 2)
 df_K
 
+df_K3 <- kmeans(df_norm, centers = 3)
+df_K3
+
+df_K4 <- kmeans(df_norm, centers = 4)
+df_K4
+
+df_K5 <- kmeans(df_norm, centers = 5)
+df_K5
+
+
+df_K2
+df_K3
+df_K4
+df_K5
+
 ## Hierarchical
 dist_mat <- dist(df_norm, method = 'euclidean')
 hclust_avg <- hclust(dist_mat, method = 'average')
