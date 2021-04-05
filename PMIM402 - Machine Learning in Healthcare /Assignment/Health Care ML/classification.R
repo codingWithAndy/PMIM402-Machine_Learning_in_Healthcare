@@ -1,6 +1,5 @@
 install.packages("randomForest")
 install.packages("ROCR")
-install.packages("pROC")
 install.packages("caret")
 install.packages("yardstick")
 library(e1071) # all purpose machine learning package
@@ -49,28 +48,41 @@ nb_model <- naiveBayes(class ~ ., data = df_train)
 ##Output apriori and conditional probabilities
 print(nb_model)
 
-nb_pred<-predict(nb_model, df_test)
-table(predicted = nb_pred,observed = df_test$class)
+
+
+####### predicting and plotting CM
+nb_pred <- predict(nb_model, newdata = df_test)
+table(predicted = nb_pred, observed = df_test$class)
 
 print(nb_pred)
+
+
+test.nb = predict(nb_model, type = "raw", newdata = df_test)
+nbpred = prediction(test.nb[,2], df_test$class)
+nbperf = performance(nbpred, "tpr", "fpr")
+plot(nbperf, main="ROC", colorize=T)#
+plot(forestperf, col=1, add=TRUE)#
+#plot(perf, col=1, add=TRUE)#
+plot(nbperf, col=2, add=TRUE)
+legend(0.6, 0.6, c('rforest', 'Naive Bayes'), 1:3)
 
 ls(nb_model)
 #ls(nb_pred)
 
 
-
+trainControl()
 
 
 
 ## Trying to print ROC curve
 nb_pred %>% 
-  roc_curve(truth=df_test$class , probClass) %>%
+  roc_curve(truth=df_test$class , nb_pred) %>%
   autoplot()
 
 
 
-pr <- prediction(nb_model, df_test$class)
-prf <- performance(pr, "tpr", "fpr")
+pr <- prediction(nb_pred, df_test$class)
+prf <- performance(nb_pred, "tpr", "fpr")
 plot(prf)
 
 roc(nb_pred, df_test$class, plot=TRUE)
@@ -80,15 +92,67 @@ print(df_train)
 
 
 #### Random Forrest
-rffit <- randomForest(df_train,df_train$class)
-plot(rffit)
+install.packages("randomForest")
+library(randomForest)
+library(ROCR)
+
+forest_train <- randomForest(class ~ ., data = df_train)
+print(forest_train) #notice the number of trees, number of splits and the confusion matrix
+plot(forest_train)
+
+testforest = predict(forest_train, newdata=df_test)
+table(testforest, df_test$class) #confusion matrix for test set
+
+
+test.forest = predict(forest_train, type = "prob", newdata = df_test)
+forestpred = prediction(test.forest[,2], df_test$class)
+forestperf = performance(forestpred, "tpr", "fpr")
+plot(forestperf, main="ROC", colorize=T)#
+#plot(bagperf, col=2, add=TRUE)#
+#plot(perf, col=1, add=TRUE)#
+plot(forestperf, col=3, add=TRUE)
+#legend(0.6, 0.6, c('rforest'), 1:3)
+
 
 varImpPlot(rffit)
 
+rf_pred <- predicted(rffit, newdata = df_test, type = "raw")
 
+roc(nb_pred, df_test$class, plot=TRUE)
 
 #prediction_for_table <- predict(rffit,df_test[,-5])
 #table(observed=df_test[,5],predicted=prediction_for_table)
+
+
+
+
+
+
+
+
+
+
+forest_train2 <- randomForest(class ~ ., data = df_train, ntree = 900)
+print(forest_train2) #notice the number of trees, number of splits and the confusion matrix
+plot(forest_train2)
+
+testforest = predict(forest_train2, newdata=df_test)
+table(testforest, df_test$class) #confusion matrix for test set
+
+
+test.forest2 = predict(forest_train2, type = "prob", newdata = df_test)
+forestpred2 = prediction(test.forest2[,2], df_test$class)
+forestperf2 = performance(forestpred2, "tpr", "fpr")
+plot(forestperf2, main="ROC", colorize=T)#
+plot(nbperf, col=2, add=TRUE)#
+plot(forestperf, col=1, add=TRUE)#
+plot(forestperf2, col=3, add=TRUE)
+legend(0.6, 0.6, c('rforest', 'nb', 'rforest opt'), 1:3)
+
+
+
+
+
 
 
 control <- trainControl(method="cv", number=5, savePredictions = TRUE, classProbs = TRUE)
@@ -96,12 +160,12 @@ control
 
 head(df_train)
 
-svmFit <- train(class ~ sex + age + pace_maker + cp + trestbps + chol + fbs + restecg + thalach, data = df_train, 
+svmFit <- train(class ~ sex + age + cp + trestbps + chol + fbs + restecg + thalach, data = df_train, 
                 method = "svmLinear",
                 trControl = control
 )
 
-
+str(df_train$class)
 
 
 ### Experimenting
