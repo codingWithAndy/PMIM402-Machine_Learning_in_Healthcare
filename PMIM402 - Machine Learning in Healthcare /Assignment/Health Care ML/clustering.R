@@ -192,7 +192,7 @@ df_K5 <- kmeans(df_norm, centers = 5)
 df_K5
 
 
-df_K2
+df_K
 df_K3
 df_K4
 df_K5

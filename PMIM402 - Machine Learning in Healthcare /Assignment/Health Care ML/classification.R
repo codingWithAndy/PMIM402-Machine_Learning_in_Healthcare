@@ -46,6 +46,7 @@ table(predicted = nb_pred, observed = df_test$class)
 print(nb_pred)
 
 
+
 test.nb = predict(nb_model, type = "raw", newdata = df_test)
 nbpred = prediction(test.nb[,2], df_test$class)
 nbperf = performance(nbpred, "tpr", "fpr")
@@ -88,8 +89,9 @@ plot(forestperf, main="Random Forrest ROC", colorize=T)#
 plot(forestperf, col=1, add=TRUE)
 legend(0.6, 0.6, c('rforest'), 1:3)
 
-varImpPlot(rffit)
+varImpPlot(forest_train)
 
+confusionMatrix(testforest, df_test$class)
 
 ### Optimizing A selected Model 
 forest_train2 <- randomForest(class ~ ., data = df_train, ntree = 800, mtry = 4, maxnodes=24)
@@ -110,6 +112,8 @@ plot(forestperf2, col=3, add=TRUE)
 legend(0.6, 0.6, c('rforest', 'nb', 'rforest opt'), 1:3)
 
 
+
+############ Experimenting
 forest_train3 <- randomForest(class ~ cp + thal + thalach + exang + oldpeak + age + chol, data = df_train)
 print(forest_train3) #notice the number of trees, number of splits and the confusion matrix
 plot(forest_train3)
@@ -132,7 +136,7 @@ legend(0.6, 0.6, c('rforest', 'nb', 'rforest opt', 'rforest opt 2'), 1:4)
 # Compare 
 print(forest_train)
 print(forest_train2)
-23print(forest_train3)
+print(forest_train3)
 
 
 
