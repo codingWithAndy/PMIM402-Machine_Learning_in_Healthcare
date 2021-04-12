@@ -4,8 +4,6 @@ library(e1071) # all purpose machine learning package
 library(reshape2) # library to reshape data
 library(ggplot2)
 options(scipen=999)
-
-
 ## Taken from unsuperised learning database notebook
 
 library(tidyverse) # data manipulation
