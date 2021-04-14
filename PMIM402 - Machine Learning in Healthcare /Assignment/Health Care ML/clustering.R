@@ -11,7 +11,6 @@ library(cluster) # clustering algorithms
 library(factoextra)
 options(repr.plot.width = 15, repr.plot.height = 20)
 
-
 ########################### Load in dataset ####################################
 df<- read.csv("1. Clustering/heart-c.csv")
 
