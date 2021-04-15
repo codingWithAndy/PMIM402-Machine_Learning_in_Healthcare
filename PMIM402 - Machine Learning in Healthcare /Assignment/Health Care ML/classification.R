@@ -28,7 +28,6 @@ df <- within(df, rm(X, Patient_ID))
 df <- na.omit(df)
 df$class <- as.factor(df$class)
 
-#df_labels <- df %>% select(class)
 print(df_labels)
 print(df)
 
@@ -50,17 +49,16 @@ print(nb_pred)
 
 # ROC
 test.nb = predict(nb_model, type = "raw", newdata = df_test)
-nbpred = prediction(test.nb[,2], df_test$class)
+nbpred = prediction(test_nb[,2], df_test$class)
 nbperf = performance(nbpred, "tpr", "fpr")
 plot(nbperf, main="Naive Bayes ROC", colorize=T)#
 plot(nbperf, col=1, add=TRUE)
 legend(0.6, 0.6, c('Naive Bayes'), 1:3)
 
-
 # More detailed CM
 confusionMatrix(nb_pred, df_test$class)
 
-##### AUC values
+# AUC values
 auc_nb <- performance(nbpred, measure = "auc")
 auc_nb <- auc_nb@y.values[[1]]
 
@@ -106,14 +104,13 @@ plot(forest_train2)
 testforest2 = predict(forest_train2, newdata=df_test)
 table(testforest2, df_test$class)
 
-
 # ROC compare against 3 Models
 test.forest2 = predict(forest_train2, type = "prob", newdata = df_test)
 forestpred2 = prediction(test.forest2[,2], df_test$class)
 forestperf2 = performance(forestpred2, "tpr", "fpr")
 plot(forestperf2, main="ROC for RF, NB and optimised Models", colorize=T)
-plot(forestperf, col=1, add=TRUE)#
-plot(nbperf, col=2, add=TRUE)#
+plot(forestperf, col=1, add=TRUE)
+plot(nbperf, col=2, add=TRUE)
 plot(forestperf2, col=3, add=TRUE)
 legend(0.6, 0.6, c('rforest', 'nb', 'rforest opt'), 1:3)
 

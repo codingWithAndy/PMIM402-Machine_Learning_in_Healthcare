@@ -30,6 +30,8 @@ for (i in 1:nrow(df['sex'])){
   }
 }
 
+df['sex'] = as.numeric(df['sex'])
+
 for (i in 1:nrow(df['cp'])){
   if (df['cp'][i,1] == 'typ_angina') {
     df['cp'][i,1] = as.numeric(1)
